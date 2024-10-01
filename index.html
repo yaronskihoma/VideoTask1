@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MorphCast Video Emotion Tracking</title>
+  <title>User Experience Tracking</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -56,7 +56,7 @@
 </head>
 <body>
 
-  <h1>Emotion Tracking Video</h1>
+  <h1>User Experience Tracking</h1>
 
   <div id="buttonContainer">
     <button id="watchBtn" style="display: none;">Step 1: Watch Video</button>
@@ -64,7 +64,7 @@
 
   <div id="videoContainer">
     <video id="videoPlayer" preload="auto">
-      <source src="https://x-ad-assets.s3.amazonaws.com/media_asset/e3ff10b4f14faa07/media" type="video/mp4">
+      <source src="https://assets.homa-cloud.com/clicqla3j02wfyq01nkyf7621/853d663c-39ba-4755-bf72-1da193d2e2d4/HIR_C67_V4_WW_VID_1080x1920_33s.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
@@ -73,13 +73,14 @@
 
   <!-- Popup for emotion tracking completed -->
   <div id="popup">
-    <h2>Emotion tracking is finished!</h2>
-    <button id="downloadReportBtn">Step 2: Download Report</button>
+    <h2>User experience tracking is finished!</h2>
+    <h2>Please download & send .zip archive to finish</h2>
+    <button id="downloadReportBtn">Step 3: Download Report</button>
   </div>
 
   <!-- Popup for Camera Permission -->
   <div id="cameraPermissionPopup">
-    <h2>Allow Camera Access</h2>
+    <h2>Step 1: Allow Camera Access</h2>
     <p>This experience requires access to your camera to track your emotions while watching the video.</p>
     <p><a href="https://yaronskihoma.github.io/VideoTask2/privacypolicy.html" target="_blank">Read our Privacy Policy</a></p>
     <button id="allowCameraBtn">Allow Camera</button>
@@ -165,7 +166,7 @@
         morphcastInstance = { start, stop };
       });
 
-    // Step 1: Watch Video
+    // Step 2: Watch Video
     watchBtn.addEventListener('click', async () => {
       videoPlayer.style.display = 'block'; // Show the video
       if (morphcastInstance) {
@@ -369,8 +370,8 @@
   let csvData = convertToCSV(trackingData);
 
   // Add the JSON and CSV files to the ZIP
-  zip.file(`emotion_tracking_report_${Date.now()}.json`, jsonData);
-  zip.file(`emotion_tracking_report_${Date.now()}.csv`, csvData);
+  zip.file(`emotion_tracking_report_${Date.now()}_t1.json`, jsonData);
+  zip.file(`emotion_tracking_report_${Date.now()}_t1.csv`, csvData);
 
   // Generate the ZIP file and trigger the download
   zip.generateAsync({ type: "blob" })
@@ -378,7 +379,7 @@
       // Create a download link for the ZIP file
       let link = document.createElement("a");
       link.href = URL.createObjectURL(content);
-      link.download = `emotion_tracking_report_${Date.now()}.zip`;
+      link.download = `emotion_tracking_report_${Date.now()}_t1.zip`; // Add suffix _t1 to the zip file name
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
