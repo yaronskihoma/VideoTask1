@@ -112,6 +112,35 @@
 
     const statisticsUploader = new MorphCastStatistics.StatisticsUploader(statsConfig);
 
+    // Function to get IP and geolocation data
+    function getIpAndGeoInfo() {
+    fetch('https://ipinfo.io/json?token=6ef0f26335447e') // Replace with your token from ipinfo.io
+      .then(response => response.json())
+      .then(data => {
+        console.log("IP Data:", data);
+        // Store the fetched data
+        const userGeoData = {
+          ip: data.ip,
+          city: data.city,
+          region: data.region,
+          country: data.country,
+          location: data.loc, // Latitude and Longitude
+          postal: data.postal
+        };
+
+        // Add the IP/Geo info to tracking data
+        trackingData.push({ type: "GEO_INFO", geoData: userGeoData });
+        console.log("User GeoData added to trackingData:", trackingData);
+      })
+      .catch(error => console.error('Error fetching IP info:', error));
+  }
+
+  // Call the function to get geo info when the page loads
+  window.addEventListener('load', () => {
+    getIpAndGeoInfo();
+  });
+
+
     // Get device and browser details
     function getDeviceDetails() {
       const deviceDetails = {
