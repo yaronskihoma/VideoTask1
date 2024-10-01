@@ -89,6 +89,7 @@
   <script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js"></script>
   <script src="https://sdk.morphcast.com/emotion-statistics/v1.0-beta/script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 
   <script>
     let trackingData = [];
@@ -356,12 +357,39 @@
       a.click();
       window.URL.revokeObjectURL(url);
     }
+    
+  //downloadReportAsZip function that will bundle both the .csv and .json files into a ZIP
+  function downloadReportAsZip() {
+  // Create a new instance of JSZip
+  let zip = new JSZip();
 
-    // Download both CSV and JSON on report download
-    downloadReportBtn.addEventListener('click', () => {
-      downloadCSV();
-      downloadJSON();
+  // Convert tracking data to JSON and CSV
+  const deviceDetails = getDeviceDetails();
+  let jsonData = JSON.stringify({ trackingData, deviceDetails }, null, 2);
+  let csvData = convertToCSV(trackingData);
+
+  // Add the JSON and CSV files to the ZIP
+  zip.file(`emotion_tracking_report_${Date.now()}.json`, jsonData);
+  zip.file(`emotion_tracking_report_${Date.now()}.csv`, csvData);
+
+  // Generate the ZIP file and trigger the download
+  zip.generateAsync({ type: "blob" })
+    .then(function(content) {
+      // Create a download link for the ZIP file
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(content);
+      link.download = `emotion_tracking_report_${Date.now()}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     });
+}
+
+
+  // Download ZIP on report download
+  downloadReportBtn.addEventListener('click', () => {
+  downloadReportAsZip();
+  });
 
   </script>
 
